@@ -33,7 +33,7 @@ See [`skills/engineering/to-issues-invert/SKILL.md`](./skills/engineering/to-iss
 Use the same installer as [mattpocock/skills](https://github.com/mattpocock/skills):
 
 ```bash
-npx skills@latest add jisookim/self-define-skills
+npx skills@latest add BigLeeChateau/self-define-skills
 ```
 
 Then pick the skills you want and the agents you want to install them on.
