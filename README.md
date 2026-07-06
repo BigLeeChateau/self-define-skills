@@ -5,7 +5,10 @@
 
 A small set of agent skills I built for my own workflow, extending ideas from [mattpocock/skills](https://github.com/mattpocock/skills).
 
-Currently focused on one thing: adding a Charlie Munger-style "invert, always invert" pass after grilling or issue-breaking sessions.
+Currently focused on two things:
+
+1. Adding a Charlie Munger-style "invert, always invert" pass after grilling or issue-breaking sessions.
+2. Extending TDD with a built-in Verify gate so code is checked against the originating spec and project standards before the loop ends.
 
 ## Skills
 
@@ -26,6 +29,12 @@ Run after `/to-issues`. Reads the previous issue breakdown from context and chec
 
 See [`skills/engineering/to-issues-invert/SKILL.md`](./skills/engineering/to-issues-invert/SKILL.md).
 
+### `/tdd-loop`
+
+A fork of [`/tdd`](https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md) with a mandatory Verify gate. Runs the full `RED → GREEN → REFACTOR → VERIFY` loop, where VERIFY checks the diff against the originating issue/spec and project standards.
+
+See [`skills/engineering/tdd-loop/SKILL.md`](./skills/engineering/tdd-loop/SKILL.md).
+
 ## Install
 
 ### For Claude Code / Codex / OpenCode
@@ -45,6 +54,7 @@ Clone or keep this repo anywhere, then symlink the skill directories:
 ```bash
 ln -s /path/to/self-define-skills/skills/productivity/grill-me-invert ~/.agents/skills/grill-me-invert
 ln -s /path/to/self-define-skills/skills/engineering/to-issues-invert ~/.agents/skills/to-issues-invert
+ln -s /path/to/self-define-skills/skills/engineering/tdd-loop ~/.agents/skills/tdd-loop
 ```
 
 ## Why Alpha?
@@ -52,6 +62,7 @@ ln -s /path/to/self-define-skills/skills/engineering/to-issues-invert ~/.agents/
 - Prompts have not been battle-tested across enough real plans.
 - The balance between "relentless grilling" and "structured report" may shift.
 - Cross-agent compatibility (Kimi, Claude, Codex, OpenCode) is not fully verified.
+- The `/tdd-loop` Verify gate relies on sub-agent review, which can still suffer from model hallucination or confirmation bias.
 
 Use at your own discretion, and please open an issue if something feels off.
 
