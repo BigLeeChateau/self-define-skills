@@ -15,7 +15,12 @@ description: Run a Munger-style "invert, always invert" review after a /to-issue
 2. 再运行 `/to-issues-invert`。
 3. 查看反向检查报告，确认是否修改或继续追问。
 
-如果当前会话中找不到 `/to-issues` 的前一轮输出，询问用户是粘贴内容继续，还是基于当前上下文继续。
+如果当前会话中找不到 `/to-issues` 的前一轮输出，提示用户：
+
+- 粘贴前一轮的 issues 内容；或
+- 基于当前会话里任何相关的计划/讨论内容继续。
+
+同时明确提醒：**反向检查不能替代正向的 `/to-issues`，它只能补充 issue 拆分。**
 
 ## Process
 
@@ -28,9 +33,13 @@ description: Run a Munger-style "invert, always invert" review after a /to-issue
 
 ### 2. 开场
 
-用一句话点题：
+先用一句话点题：
 
 > "接下来我们用芒格的反向思考，把刚才的 issue 拆分再翻一遍。"
+
+然后**简要复述你理解到的前一轮 `/to-issues` 的核心内容**（issue 列表、依赖关系、HITL/AFK 分类），并询问用户：
+
+> "这是我们要反向检查的 issue 拆分吗？如果有遗漏或偏差，请先纠正我。"
 
 如果用户语言是中文，保留芒格原句；如果用户用其他语言，翻译成对应表达。
 

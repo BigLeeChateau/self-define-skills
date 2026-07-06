@@ -15,7 +15,12 @@ description: Run a Munger-style "invert, always invert" pass after a /grill-me s
 2. 再运行 `/grill-me-invert`。
 3. 逐条回答反向追问。
 
-如果当前会话中找不到 `/grill-me` 的前一轮输出，询问用户是粘贴内容继续，还是基于当前上下文继续。
+如果当前会话中找不到 `/grill-me` 的前一轮输出，提示用户：
+
+- 粘贴前一轮的 grilling 内容；或
+- 基于当前会话里任何相关的计划/讨论内容继续。
+
+同时明确提醒：**反向思考不能替代正向的 `/grill-me`，它只能补充正向思考。**
 
 ## Process
 
@@ -28,9 +33,13 @@ description: Run a Munger-style "invert, always invert" pass after a /grill-me s
 
 ### 2. 开场
 
-用一句话点题：
+先用一句话点题：
 
 > "接下来我们用芒格的反向思考，把刚才的计划再翻一遍。"
+
+然后**简要复述你理解到的前一轮 `/grill-me` 的核心内容**（计划目标、关键决定、主要分支），并询问用户：
+
+> "这是我们要反向思考的计划吗？如果有遗漏或偏差，请先纠正我。"
 
 如果用户语言是中文，保留芒格原句；如果用户用其他语言，翻译成对应表达。
 
