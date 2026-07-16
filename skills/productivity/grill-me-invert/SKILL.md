@@ -1,17 +1,17 @@
 ---
 name: grill-me-invert
-description: Run a Munger-style "invert, always invert" pass after a /grill-me session. Reads the previous grilling output from context and relentlessly questions the plan from reverse angles.
+description: Run a Munger-style "invert, always invert" pass after a /grill-me session. Reads the previous grilling output from context and relentlessly questions the plan, decision, or idea from reverse angles.
 ---
 
 # Grill Me Invert
 
 "反过来想，永远反过来想。" —— 查理·芒格
 
-在 `/grill-me` 结束后，用这个 skill 对同一计划再做一轮反向拷问，专门挖出正向思考时容易漏掉的东西。
+在 `/grill-me` 结束后，用这个 skill 对同一计划、决定或想法再做一轮反向拷问，专门挖出正向思考时容易漏掉的东西。
 
 ## Usage
 
-1. 先运行 `/grill-me <你的计划>`，完成第一轮追问。
+1. 先运行 `/grill-me <你的计划、决定或想法>`，完成第一轮追问。
 2. 再运行 `/grill-me-invert`。
 3. 逐条回答反向追问。
 
@@ -39,7 +39,7 @@ description: Run a Munger-style "invert, always invert" pass after a /grill-me s
 
 然后**简要复述你理解到的前一轮 `/grill-me` 的核心内容**（计划目标、关键决定、主要分支），并询问用户：
 
-> "这是我们要反向思考的计划吗？如果有遗漏或偏差，请先纠正我。"
+> "这是我们要反向思考的计划、决定或想法吗？如果有遗漏或偏差，请先纠正我。"
 
 如果用户语言是中文，保留芒格原句；如果用户用其他语言，翻译成对应表达。
 
@@ -94,6 +94,8 @@ description: Run a Munger-style "invert, always invert" pass after a /grill-me s
 
 - 一次只问一个问题，等待用户回答后再继续。
 - 不要为每个问题提供推荐答案，逼用户自己思考。
+- 事实可以通过探索环境（代码库、文件、工具）获取，但每一个反向问题都必须交给用户回答，等待用户回答后再继续；不要替用户回答。
 - 使用用户的语言输出。
 - 如果某个分支已经收敛，果断进入下一个框架，不要恋战。
 - 默认 relentless，但四个框架走完后要给一个清晰终点。
+- 在确认本轮反向检查完成之前，不要修改代码、创建 issue 或变更计划。

@@ -1,11 +1,11 @@
 ---
 name: tdd-loop
-description: Test-driven development with a built-in spec/standards verification gate. Use when you want RED→GREEN→REFACTOR→VERIFY, where VERIFY checks code against the originating issue/spec and project standards.
+description: Test-driven development with a built-in spec/standards verification gate. Use when you want RED→GREEN→VERIFY, where VERIFY checks code against the originating issue/spec and project standards.
 ---
 
 # TDD Loop
 
-A fork of [mattpocock/skills/tdd](https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md) with one addition: a mandatory **Verify** gate after Refactor.
+A fork of [mattpocock/skills/tdd](https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md) with one addition: a mandatory **Verify** gate after the red → green loop.
 
 Tests going green is not enough. This skill keeps the code aligned with the originating issue/spec and the project's documented standards before the loop ends.
 
@@ -15,10 +15,28 @@ Tests going green is not enough. This skill keeps the code aligned with the orig
 
 **Additional principle**: A TDD cycle ends at **Verify**, not at green tests. The Verify gate checks that the implementation matches the spec and standards that the tests alone may not enforce.
 
+## What a good test is
+
+Tests verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists — and survives refactors because it doesn't care about internal structure.
+
+## Seams — where tests go
+
+A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
+
+**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test is written at an unconfirmed seam. You can't test everything — agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+
+Ask: "What's the public interface, and which seams should we test?"
+
+## Anti-patterns
+
+- **Implementation-coupled** — mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behavior hasn't changed.
+- **Tautological** — the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values must come from an independent source of truth — a known-good literal, a worked example, the spec.
+- **Horizontal slicing** — writing all tests first, then all implementation. Bulk tests verify _imagined_ behavior: you test the _shape_ of things rather than user-facing behavior, the tests go insensitive to real changes, and you commit to test structure before understanding the implementation. Work in **vertical slices** instead — one test → one implementation → repeat, each test a **tracer bullet** that responds to what the last cycle taught you.
+
 ## Workflow
 
 ```
-Planning → Tracer Bullet → Incremental Loop → Refactor → Verify → Done
+Planning → Tracer Bullet → Incremental Loop → Verify → Done
 ```
 
 ### 1. Planning
@@ -59,23 +77,15 @@ Rules:
 - Only enough code to pass the current test.
 - Don't anticipate future tests.
 - Keep tests focused on observable behavior.
+- Never refactor while RED.
 
-### 4. Refactor
+### 4. Verify
 
-After all tests pass:
+The Verify gate runs **after** the red → green loop and is mandatory for `/tdd-loop`. If the user does not want verification, they should use `/tdd` instead.
 
-- [ ] Extract duplication.
-- [ ] Deepen modules.
-- [ ] Apply SOLID principles where natural.
-- [ ] Run tests after each refactor step.
+Verify is a code-review-style check on the diff. It may perform **minimal, behavior-preserving refactoring** when needed to satisfy standards or spec findings. Structural refactoring is out of scope and stops for user decision or belongs to the `code-review` skill.
 
-**Never refactor while RED.**
-
-### 5. Verify
-
-The Verify gate runs **after** Refactor and is mandatory for `/tdd-loop`. If the user does not want verification, they should use `/tdd` instead.
-
-#### 5.1 Capture the diff
+#### 4.1 Capture the diff
 
 Use the starting commit recorded in Planning:
 
@@ -89,11 +99,11 @@ Also capture the list of commits:
 git log <start-commit>..HEAD --oneline
 ```
 
-#### 5.2 Identify standards sources
+#### 4.2 Identify standards sources
 
 Find project standards docs such as `CODING_STANDARDS.md`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, or similar.
 
-#### 5.3 Spawn parallel review sub-agents
+#### 4.3 Spawn parallel review sub-agents
 
 Run two sub-agents in parallel. Neither should see the TDD conversation history or intermediate reasoning — only the diff, the spec, and the standards.
 
@@ -107,7 +117,7 @@ Run two sub-agents in parallel. Neither should see the TDD conversation history 
 - Input: diff command, commit list, spec source.
 - Brief: "Report: (a) spec requirements that are missing or partial; (b) behavior in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec for each finding. Under 400 words."
 
-#### 5.4 Classify findings
+#### 4.4 Classify findings
 
 Map each finding into one of three buckets:
 
@@ -115,18 +125,18 @@ Map each finding into one of three buckets:
 |------|---------|--------|
 | **Type 1** | Spec conflicts with tests / reality | Record, present to user after full review |
 | **Type 2 Major** | Implementation misses spec; fixing it won't break tests | Stop and ask user |
-| **Type 2 Minor** | Implementation misses spec; low-risk fix | Auto-fix, then re-verify |
+| **Type 2 Minor** | Implementation misses spec; low-risk fix | Auto-fix, then re-verify once |
 
-#### 5.5 Auto-fix Type 2 Minor
+#### 4.5 Auto-fix Type 2 Minor
 
 Apply minor fixes. After all minor fixes are applied, re-run:
 
 - The full test suite.
-- The full Verify gate (up to a maximum of 3 rounds to prevent loops).
+- The full Verify gate (maximum 1 round to prevent loops).
 
-If a minor fix introduces new findings, classify them again.
+If a minor fix introduces new findings, classify them again. After the single re-verify round, any remaining findings are reported and the loop stops.
 
-#### 5.6 Present the report
+#### 4.6 Present the report
 
 Output structure:
 
@@ -155,7 +165,7 @@ Output structure:
 
 Write the full report to `.tdd-review/<timestamp>-<issue-slug>.md`.
 
-#### 5.7 Handle Type 1 and Type 2 Major
+#### 4.7 Handle Type 1 and Type 2 Major
 
 For each Type 1 or Type 2 Major finding, stop and ask the user:
 
@@ -184,9 +194,10 @@ Do not proceed until the user resolves every major finding.
 - One test at a time during RED/GREEN.
 - Never refactor while RED.
 - Verify is mandatory for `/tdd-loop`. Use `/tdd` if you want the original behavior without the gate.
+- Verify may do minimal, behavior-preserving refactoring; structural refactoring stops for user decision.
 - Review sub-agents must not see TDD conversation history or reasoning.
 - Every spec finding must quote the spec.
 - Every standards finding must cite the standard source.
-- Type 2 Minor fixes trigger a re-verify (max 3 rounds).
+- Type 2 Minor fixes trigger at most one re-verify round.
 - Major findings always stop for user decision.
 - Use the user's language for all output.

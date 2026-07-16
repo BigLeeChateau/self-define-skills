@@ -7,14 +7,14 @@ A small set of agent skills I built for my own workflow, extending ideas from [m
 
 Currently focused on two things:
 
-1. Adding a Charlie Munger-style "invert, always invert" pass after grilling or issue-breaking sessions.
+1. Adding a Charlie Munger-style "invert, always invert" pass after grilling or ticket-breaking sessions.
 2. Extending TDD with a built-in Verify gate so code is checked against the originating spec and project standards before the loop ends.
 
 ## Skills
 
 ### `/grill-me-invert`
 
-Run after `/grill-me`. Reads the previous grilling output from context and relentlessly questions the plan from reverse angles:
+Run after `/grill-me`. Reads the previous grilling output from context and relentlessly questions the plan, decision, or idea from reverse angles:
 
 1. **Risk Scan** — single points of failure, hidden dependencies, second-order effects.
 2. **Invert Assumptions** — flip the plan's foundational premises.
@@ -23,15 +23,15 @@ Run after `/grill-me`. Reads the previous grilling output from context and relen
 
 See [`skills/productivity/grill-me-invert/SKILL.md`](./skills/productivity/grill-me-invert/SKILL.md).
 
-### `/to-issues-invert`
+### `/to-tickets-invert`
 
-Run after `/to-issues`. Reads the previous issue breakdown from context and checks it for hidden risks, reversed assumptions, and fragile dependencies. Produces a structured review report + a diff of suggested changes, then optionally drills deeper into specific risks.
+Run after `/to-tickets`. Reads the previous ticket breakdown from context and checks it for hidden risks, reversed assumptions, and fragile dependencies. Produces a structured review report + a diff of suggested changes, then optionally drills deeper into specific risks.
 
-See [`skills/engineering/to-issues-invert/SKILL.md`](./skills/engineering/to-issues-invert/SKILL.md).
+See [`skills/engineering/to-tickets-invert/SKILL.md`](./skills/engineering/to-tickets-invert/SKILL.md).
 
 ### `/tdd-loop`
 
-A fork of [`/tdd`](https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md) with a mandatory Verify gate. Runs the full `RED → GREEN → REFACTOR → VERIFY` loop, where VERIFY checks the diff against the originating issue/spec and project standards.
+A fork of [`/tdd`](https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md) with a mandatory Verify gate. Runs the full `RED → GREEN → VERIFY` loop, where VERIFY checks the diff against the originating issue/spec and project standards.
 
 See [`skills/engineering/tdd-loop/SKILL.md`](./skills/engineering/tdd-loop/SKILL.md).
 
@@ -53,7 +53,7 @@ Clone or keep this repo anywhere, then symlink the skill directories:
 
 ```bash
 ln -s /path/to/self-define-skills/skills/productivity/grill-me-invert ~/.agents/skills/grill-me-invert
-ln -s /path/to/self-define-skills/skills/engineering/to-issues-invert ~/.agents/skills/to-issues-invert
+ln -s /path/to/self-define-skills/skills/engineering/to-tickets-invert ~/.agents/skills/to-tickets-invert
 ln -s /path/to/self-define-skills/skills/engineering/tdd-loop ~/.agents/skills/tdd-loop
 ```
 
